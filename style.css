@@ -1,43 +1,62 @@
-/* ====== GLOBAL STYLES ====== */
+/* ===== GLOBAL ===== */
 * {
   box-sizing: border-box;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-  background-color: #f5f7fa;
+  background-color: #f9f9f9;
   color: #333;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* ====== HEADER ====== */
+/* ===== HEADER ===== */
 header {
-  background-color: #002147; /* USIU blue */
+  background-color: #002147; /* USIU Blue */
   color: #fff;
-  padding: 20px 10%;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 15px 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-header h1 {
-  font-size: 1.8rem;
-  letter-spacing: 1px;
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-/* ====== MAIN ====== */
+.logo {
+  height: 70px;
+  width: auto;
+}
+
+.header-text h1 {
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+
+.header-text p {
+  font-size: 1.1rem;
+  color: #ffcc00; /* USIU Gold Accent */
+  font-weight: 600;
+}
+
+/* ===== MAIN ===== */
 main {
   flex: 1;
-  padding: 30px 10%;
+  padding: 40px 10%;
   display: flex;
   flex-direction: column;
   gap: 40px;
 }
 
-/* ====== SECTIONS ====== */
+/* ===== SECTION ===== */
 section {
   background: #fff;
   border-radius: 10px;
@@ -48,12 +67,12 @@ section {
 section h2 {
   color: #002147;
   margin-bottom: 15px;
-  font-size: 1.3rem;
-  border-bottom: 2px solid #e0e0e0;
+  font-size: 1.4rem;
+  border-bottom: 3px solid #ffcc00;
   padding-bottom: 5px;
 }
 
-/* ====== FORM STYLING ====== */
+/* ===== FORM ===== */
 form {
   display: flex;
   flex-direction: column;
@@ -66,12 +85,12 @@ form textarea {
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
-  transition: border 0.3s;
+  transition: border-color 0.3s ease;
 }
 
 form input:focus,
 form textarea:focus {
-  border-color: #002147;
+  border-color: #ffcc00;
   outline: none;
 }
 
@@ -81,25 +100,25 @@ form textarea {
 }
 
 button {
-  background-color: #002147;
-  color: #fff;
+  background-color: #ffcc00;
+  color: #002147;
   padding: 12px;
   border: none;
   border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #004aad;
+  background-color: #e6b800;
 }
 
-/* ====== TABLE ====== */
+/* ===== TABLE ===== */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 thead {
@@ -114,24 +133,29 @@ td {
   border-bottom: 1px solid #ddd;
 }
 
-tr:hover {
-  background-color: #f0f4f9;
+tr:nth-child(even) {
+  background-color: #f2f4f8;
 }
 
-button[onclick] {
-  background-color: #004aad;
+tr:hover {
+  background-color: #eef3fc;
+}
+
+td button {
+  background-color: #002147;
   color: #fff;
   padding: 6px 10px;
   border: none;
   border-radius: 4px;
   font-size: 0.9rem;
+  transition: background-color 0.3s ease;
 }
 
-button[onclick]:hover {
-  background-color: #0062cc;
+td button:hover {
+  background-color: #004a80;
 }
 
-/* ====== FOOTER ====== */
+/* ===== FOOTER ===== */
 footer {
   background-color: #002147;
   color: #fff;
@@ -140,22 +164,28 @@ footer {
   font-size: 0.9rem;
 }
 
-/* ====== RESPONSIVE DESIGN ====== */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  main {
+  header {
+    flex-direction: column;
     padding: 20px;
   }
 
-  form input,
-  form textarea {
-    font-size: 0.95rem;
+  .logo {
+    height: 60px;
   }
 
-  header h1 {
-    font-size: 1.4rem;
+  .header-text h1 {
+    font-size: 1.3rem;
+    text-align: center;
   }
 
-  section h2 {
-    font-size: 1.1rem;
+  .header-text p {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  main {
+    padding: 20px;
   }
 }
