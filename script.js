@@ -1,8 +1,3 @@
-// Import Firebase SDKs (v10+ modular)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { 
-  getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, onSnapshot 
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCCrLO4hwIXQxSBFcaXzuLmUL5Uan9Sfe0",
@@ -15,68 +10,62 @@ const firebaseConfig = {
 };
 
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// Step 2: Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
-// Firestore collections
-const visitorsCol = collection(db, "visitors");
+// Step 3: Reference the database
+const db = firebase.database();
 
-// Elements
-const form = document.getElementById("checkin-form");
-const visitorList = document.getElementById("visitor-list");
+// Step 4: Function to register a new visitor
+function registerVisitor() {
+  const name = document.getElementById("visitorName").value;
+  const phone = document.getElementById("visitorPhone").value;
+  const purpose = document.getElementById("visitorPurpose").value;
+  const timeIn = new Date().toLocaleString();
 
-// Function to render visitor rows
-function renderVisitor(id, data) {
-  const tr = document.createElement("tr");
-  const checkedOut = data.checkedOutAt ? data.checkedOutAt : "—";
+  if (name === "" || phone === "" || purpose === "") {
+    alert("Please fill all fields!");
+    return;
+  }
 
-  tr.innerHTML = `
-    <td>${data.fullName}</td>
-    <td>${data.host}</td>
-    <td>${data.purpose}</td>
-    <td>${data.checkedInAt}</td>
-    <td>
-      ${
-        data.checkedOutAt
-          ? checkedOut
-          : `<button onclick="checkOutVisitor('${id}')">Check Out</button>`
-      }
-    </td>
-  `;
-  return tr;
+  // Create a unique ID for each visitor
+  const newVisitorRef = db.ref("visitors").push();
+
+  newVisitorRef.set({
+    name: name,
+    phone: phone,
+    purpose: purpose,
+    timeIn: timeIn
+  })
+  .then(() => {
+    alert("Visitor registered successfully!");
+    document.getElementById("visitorForm").reset();
+  })
+  .catch((error) => {
+    console.error("Error saving data: ", error);
+  });
 }
 
-// Real-time listener (auto-updates the table)
-onSnapshot(visitorsCol, (snapshot) => {
-  visitorList.innerHTML = "";
-  snapshot.forEach((docSnap) => {
-    const data = docSnap.data();
-    visitorList.appendChild(renderVisitor(docSnap.id, data));
+// Step 5: Function to fetch visitor records
+function loadVisitors() {
+  const visitorsTable = document.getElementById("visitorsTable");
+  db.ref("visitors").on("value", (snapshot) => {
+    visitorsTable.innerHTML = "";
+    snapshot.forEach((childSnapshot) => {
+      const visitor = childSnapshot.val();
+      const row = `
+        <tr>
+          <td>${visitor.name}</td>
+          <td>${visitor.phone}</td>
+          <td>${visitor.purpose}</td>
+          <td>${visitor.timeIn}</td>
+        </tr>
+      `;
+      visitorsTable.innerHTML += row;
+    });
   });
-});
+}
 
-// Add new visitor
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const visitor = {
-    fullName: document.getElementById("fullname").value,
-    phone: document.getElementById("phone").value,
-    email: document.getElementById("email").value,
-    company: document.getElementById("company").value,
-    host: document.getElementById("host").value,
-    purpose: document.getElementById("purpose").value,
-    checkedInAt: new Date().toLocaleString(),
-    checkedOutAt: null
-  };
+// Load data when the page starts
+window.onload = loadVisitors;
 
-  await addDoc(visitorsCol, visitor);
-  form.reset();
-});
-
-// Check out a visitor
-window.checkOutVisitor = async function (id) {
-  const ref = doc(db, "visitors", id);
-  await updateDoc(ref, { checkedOutAt: new Date().toLocaleString() });
-  alert("Visitor checked out successfully!");
-};
